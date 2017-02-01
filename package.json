@@ -1,0 +1,32 @@
+{
+  "name": "eunit-runner",
+  "version": "1.0.0",
+  "description": "Runner for eunit Elm unit tests",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antivanov/eunit.git"
+  },
+  "keywords": [
+    "elm",
+    "unit",
+    "testing",
+    "test",
+    "runner"
+  ],
+  "author": "Anton Ivanov <anton.al.ivanov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antivanov/eunit/issues"
+  },
+  "homepage": "https://github.com/antivanov/eunit#readme",
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
