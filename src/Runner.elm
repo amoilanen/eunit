@@ -3,6 +3,7 @@ module Runner exposing (runAll)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (..)
+import Json.Encode exposing (object, int, string, encode)
 
 import Test exposing (..)
 import CssStyles exposing (..)
@@ -53,6 +54,15 @@ run test =
       in
         RunnerResult testStats testReport
 
+getDescription: Test -> String
+getDescription test =
+  case test of
+    (Suite description tests) ->
+      description
+    (Test description expectation) ->
+      description
+
+
 runAll: Test -> Html msg
 runAll test =
   let
@@ -65,11 +75,20 @@ runAll test =
     else
       h3 [] [text("All tests passed")]
     htmlReport = runnerResult.report
+    suiteSummary = Json.Encode.object [
+      ("passed", int suiteStats.passed)
+      , ("failed", int suiteStats.failed)
+      , ("description", string (getDescription test) )
+    ]
+    suiteSummaryJson = encode 0 suiteSummary
   in
     div []
-      [
+      [ 
         commonCssStyles
         , testReportTitle
-        , h4 [] [text(statusString)]
+        , h4 [class "test-summary"] [
+            div [class "json-summary"] [text(suiteSummaryJson)]
+            , text(statusString)
+          ]
         , htmlReport
       ]

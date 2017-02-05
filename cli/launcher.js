@@ -1,54 +1,63 @@
-var request = require('request');
+var phantomjs = require('phantomjs');
+var path = require('path');
 var spawn = require('child_process').spawn;
+
+var elmReactorProcess;
 
 function launcnElmReactor() {
   return new Promise(function(resolve, reject) {
-    var elmReactorProcess = spawn('elm-reactor');
+    elmReactorProcess = spawn('elm-reactor');
 
     elmReactorProcess.stdout.on('data', (data) => {
-      console.log(data.toString());
+      //console.log(data.toString());
     });
     elmReactorProcess.stderr.on('data', (data) => {
-      console.log(data.toString());
+      //console.log(data.toString());
     });
     elmReactorProcess.on('close', (code) => {
-      console.log('elm-reactor closed');
+      //console.log('elm-reactor closed');
     });
     resolve();
   });
 }
 
-function get(url) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(() => {
-    request(url, function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        resolve(body);
-      } else {
-        reject(error);
-      }
-    });
-    }, 1000); //TODO: Wait when elm-reactor has been started up
+function launchPhantomJs() {
+  const runnerScript = path.join(__dirname, 'phantomjs.runner.js');
+  var phantomjsProcess = spawn(phantomjs.path, [runnerScript]);
+
+  phantomjsProcess.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
+  phantomjsProcess.stderr.on('data', (data) => {
+    console.log(data.toString());
+  });
+  phantomjsProcess.on('close', (code) => {
+    if (code != 0) {
+      //console.log('Runner failed!');
+    } else {
+      //console.log('Runner succeeded');
+    }
+    /*
+    TODO: Make sure that elm-reactor process is stopped
+    //TODO: When tests have been run and result reported
+//reactorProcess.kill();
+    elmReactorProcess.stdin.pause();
+    elmReactorProcess.kill();
+    */
+    process.exit(code);
   });
 }
 
 launcnElmReactor().then(function() {
-  return get('http://localhost:8000/test/Main.elm');
-}).then(function(body) {
-  console.log(body);
-}).catch(function(error) {
-  console.log(error);
+  launchPhantomJs();
 });
 
-//TODO: Use PhantomJS to connect to the test page, otherwise the test code will not be run
 
-//TODO: When tests have been run and result reported
-//reactorProcess.kill();
+//TODO: Error handling: No elm installed globablly? Ask to install it
 
-//TODO: No elm installed globablly? Ask to install it
 //TODO: No elm-reactor is yet launched, launch new instance
 //TODO: elm-reactor has already been launched, use the existing instance
-//TODO: If no test/Main.elm exists, ask to create it
 
-//TODO: Report number of succeeded tests, print OK if tests succeed, print FAIL if some fail, show failed tests names?
-//TODO: If there is a syntactic error in the tests report it as well, print the error?
+//TODO: Error handling: If no test/Main.elm exists, ask to create it
+
+//TODO: Error handling: If there is a syntactic error in the tests report it as well, print the error?

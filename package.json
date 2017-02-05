@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/antivanov/eunit#readme",
   "dependencies": {
+    "phantomjs": "^2.1.7",
     "request": "^2.79.0"
   }
 }

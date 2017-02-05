@@ -24,5 +24,8 @@ commonCssStyles =
         margin-left: 1rem;
         margin-bottom: 1rem;
       }
+      .json-summary {
+        display: none;
+      }
     """
   in node "style" [] [text(styleContent)]
