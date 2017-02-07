@@ -2,25 +2,6 @@ var phantomjs = require('phantomjs');
 var path = require('path');
 var spawn = require('child_process').spawn;
 
-var elmReactorProcess;
-
-function launcnElmReactor() {
-  return new Promise(function(resolve, reject) {
-    elmReactorProcess = spawn('elm-reactor');
-
-    elmReactorProcess.stdout.on('data', (data) => {
-      //console.log(data.toString());
-    });
-    elmReactorProcess.stderr.on('data', (data) => {
-      //console.log(data.toString());
-    });
-    elmReactorProcess.on('close', (code) => {
-      //console.log('elm-reactor closed');
-    });
-    resolve();
-  });
-}
-
 function launchPhantomJs() {
   const runnerScript = path.join(__dirname, 'phantomjs.runner.js');
   var phantomjsProcess = spawn(phantomjs.path, [runnerScript]);
@@ -37,27 +18,21 @@ function launchPhantomJs() {
     } else {
       //console.log('Runner succeeded');
     }
-    /*
-    TODO: Make sure that elm-reactor process is stopped
-    //TODO: When tests have been run and result reported
-//reactorProcess.kill();
-    elmReactorProcess.stdin.pause();
-    elmReactorProcess.kill();
-    */
     process.exit(code);
   });
 }
 
-launcnElmReactor().then(function() {
-  launchPhantomJs();
+/*
+ * elm-reactor spawns 2 processes, only one of them can be terminated from Node, then some partial elm-reactor is running
+ * We choose not to terminate elm-reactor and ignore an attempt to spawn it if it is already running.
+ */
+var elmReactor = spawn('elm-reactor', []);
+elmReactor.on('error', function(err) {
+  console.log('ERROR: Could not launch elm-reactor... Please install Elm and make sure elm-reactor can be launched.');
 });
+launchPhantomJs();
 
-
-//TODO: Error handling: No elm installed globablly? Ask to install it
-
-//TODO: No elm-reactor is yet launched, launch new instance
-//TODO: elm-reactor has already been launched, use the existing instance
-
-//TODO: Error handling: If no test/Main.elm exists, ask to create it
-
-//TODO: Error handling: If there is a syntactic error in the tests report it as well, print the error?
+//TODO: Error handling: No elm installed globablly? Ask to install it - OK
+//TODO: Error handling: If no test/Main.elm exists, ask to create it - OK
+//TODO: Error handling: If there is a syntactic error in the tests report it as well, print the error?'
+//TODO: Re-factor the test runner

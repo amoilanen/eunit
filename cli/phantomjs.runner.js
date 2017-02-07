@@ -17,9 +17,38 @@ function printNormal(message) {
   console.log('\x1b[36m ' + message + ' \x1b[0m');
 }
 
+function getErrorMessage() {
+  return page.evaluate(function() {
+    return document.body.innerHTML.replace(/<(.*?)>/g, '\1');
+  }).toString('utf-8');
+}
+
+function hasSummary() {
+  return page.evaluate(function() {
+    return !!document.body.querySelector('.json-summary');
+  });
+}
+
+function getSummary() {
+  return  page.evaluate(function() {
+    var suiteSummaryJSON = document.body.querySelector('.json-summary').innerHTML;
+
+    return JSON.parse(suiteSummaryJSON);
+  });
+}
+
 function waitForTestResults(page, onResultsReady) {
   var areTestsReady = false;
   var checkCounts = 0;
+
+  var noTestsFound = page.evaluate(function() {
+    return document.title === 'Page Not Found';
+  });
+  if (noTestsFound) {
+    printRed('ERROR: No tests to run found. Make sure test/Main.elm exists: it provides an entry point for the tests.');
+    phantom.exit(1);
+  }
+
   setTimeout(function checkIfReady() {
     areTestsReady = page.evaluate(function(){
       return document.body.querySelector('.test-summary') != null;
@@ -29,25 +58,25 @@ function waitForTestResults(page, onResultsReady) {
     if (!areTestsReady && (checkCounts < 10)) {
       setTimeout(checkIfReady, 100);
     } else {
-      var suiteSummary = page.evaluate(function() {
-        var suiteSummaryJSON = document.body.querySelector('.json-summary').innerHTML;
-
-        return JSON.parse(suiteSummaryJSON);
-      });
-      onResultsReady(suiteSummary);
+      if (hasSummary()) {
+        onResultsReady(getSummary());
+      } else {
+        printRed('ERROR: Could not run tests... More details below:');
+        printRed(getErrorMessage());
+        phantom.exit(1);
+      }
     }
   }, 100);
 }
 
 var startTime = new Date();
-
-printNormal('EUnit test runner');
 page.open(testPage, function(status) {
   if (status !== 'success') {
-    console.log('Unable to open ' + testPage + ', exiting...');
+    printRed('ERROR: Unable to open ' + testPage + ', exiting...');
     phantom.exit(1);
   }
 
+  printNormal('EUnit test runner');
   //console.log('Page ' + testPage + ' was opened');
 
   printNormal('Running test suite...');
