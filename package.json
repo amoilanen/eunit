@@ -6,9 +6,17 @@
   "directories": {
     "test": "test"
   },
+  "bin": {
+    "eunit": "./cli/eunit.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "cli",
+    "example",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antivanov/eunit.git"
@@ -27,7 +35,7 @@
   },
   "homepage": "https://github.com/antivanov/eunit#readme",
   "dependencies": {
-    "phantomjs": "^2.1.7",
-    "request": "^2.79.0"
+    "fs-extra": "^2.0.0",
+    "phantomjs": "^2.1.7"
   }
 }

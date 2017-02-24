@@ -15,8 +15,8 @@ isTrue: Bool -> Expectation
 isTrue actual =
   let
     errorMessage = "Expected to be True, instead False"
-
   in Expectation errorMessage (\() -> actual)
+
 isFalse: Bool -> Expectation
 isFalse actual =
   let
