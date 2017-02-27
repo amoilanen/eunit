@@ -5,7 +5,8 @@ module Runner exposing (runAll)
 # Running tests
 @docs runAll
 
-    --Complete example of create an example test suite and running it
+ Complete example of create an example test suite and running it:
+
     import Expectation exposing (eql, isTrue)
     import Test exposing (it, describe, Test)
     import Runner exposing (runAll)
@@ -94,7 +95,8 @@ getDescription test =
 
 {-| Run the test suite.
 
-    -- Custom expectation
+ Custom expectation
+
     all : Test
     all = it "should add two positive numbers" <|
             eql (1 + 2) 3

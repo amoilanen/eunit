@@ -16,7 +16,8 @@ import Expectation exposing (Expectation)
 {-| Tests that can be executed. Tests can be either simple tests that have only one expectation
 or test suites which group other test suites and simple tests together.
 
-    -- Test suite consisting of two tests
+ Test suite consisting of two tests
+
     Suite
       "mySuite"
       [
@@ -27,7 +28,8 @@ or test suites which group other test suites and simple tests together.
  It is expected that tests and suite are constructed using helper methods `describe` and `it` rather
  than by using `Suite` and `Test` directly.
 
-    -- Same test suite consisting of two tests, but declared using `describe` and `it`
+ Same test suite consisting of two tests, but declared using `describe` and `it`
+
     describe
       "mySuite"
       [
@@ -39,7 +41,8 @@ type Test = Suite String (List Test) | Test String Expectation
 
 {-| Constructs a single simple test.
 
-    -- Simple test
+ Simple test
+
     it "should add" eql(2, 1 + 1)
 -}
 it: String -> Expectation -> Test
@@ -48,7 +51,8 @@ it message expectation =
 
 {-| Constructs a test suite consisting of other test suites or simple tests.
 
-    -- Test suite
+ Test suite
+
     describe "Arithmetic"
      [
        describe "+"
