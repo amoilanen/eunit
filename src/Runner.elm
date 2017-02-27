@@ -1,5 +1,35 @@
 module Runner exposing (runAll)
 
+{-| Test runner that produces `Html msg` as its output.
+
+# Running tests
+@docs runAll
+
+    --Complete example of create an example test suite and running it
+    import Expectation exposing (eql, isTrue)
+    import Test exposing (it, describe, Test)
+    import Runner exposing (runAll)
+
+    import Html exposing (Html)
+
+    all : Test
+    all = describe "Arithmetic operations"
+      [ describe "Addition"
+        [ it "should add two positive numbers" <|
+            eql (1 + 2) 3
+        , it "should be commutative" <|
+            eql (1 + 2) (2 + 1)
+        , it "should be associative" <|
+            eql ((1 + 2) + 3) (1 + (2 + 3))
+      ]
+    ]
+
+    main : Html msg
+    main =
+      runAll all
+
+-}
+
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (..)
@@ -62,11 +92,21 @@ getDescription test =
     (Test description expectation) ->
       description
 
+{-| Run the test suite.
 
+    -- Custom expectation
+    all : Test
+    all = it "should add two positive numbers" <|
+            eql (1 + 2) 3
+
+    main : Html msg
+    main =
+      runAll all
+-}
 runAll: Test -> Html msg
-runAll test =
+runAll testSuite =
   let
-    runnerResult = run test
+    runnerResult = run testSuite
     suiteStats = runnerResult.suiteStats
     statusString = String.join " " ["Passed: ", toString suiteStats.passed,
                                   "Failed: ", toString suiteStats.failed]
@@ -78,7 +118,7 @@ runAll test =
     suiteSummary = Json.Encode.object [
       ("passed", int suiteStats.passed)
       , ("failed", int suiteStats.failed)
-      , ("description", string (getDescription test) )
+      , ("description", string (getDescription testSuite) )
     ]
     suiteSummaryJson = encode 0 suiteSummary
   in

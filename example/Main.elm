@@ -1,8 +1,8 @@
-import Expectation exposing (..)
-import Test exposing (..)
-import Runner exposing (..)
+import Expectation exposing (eql, isTrue)
+import Test exposing (it, describe, Test)
+import Runner exposing (runAll)
 
-import Html exposing (..)
+import Html exposing (Html)
 
 all : Test
 all = describe "Arithmetic operations"
