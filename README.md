@@ -7,7 +7,7 @@ Minimalistic unit testing framework for Elm.
 In the root directory of an Elm project:
 
 * Run `elm-package install eunit` to install the `eunit` Elm package
-* Run `npm install eunit-runner` to install the command line test runner
+* Run `npm install -g eunit-runner` to install the command line test runner
 
 ## Creating tests
 
@@ -70,14 +70,18 @@ Tests can be simply run in browser, just start elm-reactor in the root directory
 
 ### Command line
 
-Make sure that `eunit-runner` NPM package is installed, run `eunit` in the root directory of the project.
+Make sure that `eunit-runner` NPM package is installed globally, run `eunit` in the root directory of the project.
 You should get an output like the following one:
 
->  EUnit test runner 
-> Running test suite... 
->  Arithmetic operations 
->  .......xx 
-> Elapsed time: 491ms 
-> Passed: 7 
-> FAILED: 2 
-> Open http://localhost:9908/test/Main.elm in a browser for more details.
+```
+  EUnit test runner 
+ Running test suite... 
+ 
+  Arithmetic operations 
+ 
+  .......xx 
+ Elapsed time: 500ms 
+ Passed: 7 
+ FAILED: 2 
+ To debug run 'elm-reactor -p 9908 ' and open http://localhost:9908/test/Main.elm in a browser for more details.
+```
