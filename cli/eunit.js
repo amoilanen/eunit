@@ -4,6 +4,30 @@ var path = require('path');
 var logger = require('./logger');
 var spawn = require('child_process').spawn;
 var fs = require('fs-extra');
+var processUtils = require('./process');
+var pids = processUtils.pids;
+var find = processUtils.find;
+var terminate = processUtils.terminate;
+
+var initialElmPids = getElmPids();
+
+function getElmPids() {
+  var elmPids = pids(find(/elm/));
+  return elmPids;
+}
+
+function newElmPids() {
+  var currentElmPids = getElmPids();
+  return currentElmPids.filter(function(elmPid) {
+    return initialElmPids.indexOf(elmPid) < 0;
+  });
+}
+
+function terminateNewElmProcesses() {
+  newElmPids().forEach(function(elmPid) {
+    terminate(elmPid);
+  });
+}
 
 function launchPhantomJs() {
   const runnerScript = path.join(__dirname, 'phantomjs.runner.js');
@@ -16,16 +40,15 @@ function launchPhantomJs() {
     logger.info(data.toString());
   });
   phantomjsProcess.on('close', (code) => {
+
+    terminateNewElmProcesses();
     process.exit(code);
   });
 }
 
 function runSuite() {
-  /*
-   * elm-reactor spawns 2 processes, only one of them can be terminated from Node, then some partial elm-reactor is running
-   * We choose not to terminate elm-reactor and ignore an attempt to spawn it if it is already running.
-   */
-  var elmReactor = spawn('elm-reactor', []);
+  var elmReactor = spawn('elm-reactor', ['-p', '9908']);
+
   elmReactor.on('error', function(err) {
     logger.error('ERROR: Could not launch elm-reactor...'
       + 'Please install Elm and make sure elm-reactor can be launched.');
@@ -56,9 +79,6 @@ if (initMode) {
     runSuite();
   }
 }
-
-
-//TODO: Find a way to terminate both spawned elm-reactor processes. List processes by name 'elm' and terminate them?
 
 //TODO: Publish the Elm package
 //TODO: Publish eunit init eunit run the runner package to npmjs

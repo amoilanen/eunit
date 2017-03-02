@@ -1,4 +1,4 @@
-var TEST_PAGE_URL = 'http://localhost:8000/test/Main.elm';
+var TEST_PAGE_URL = 'http://localhost:9908/test/Main.elm';
 var MAX_CHECK_COUNT = 50;
 var CHECK_WAITING_INTERVAL_MS = 100;
 
