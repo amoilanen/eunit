@@ -21,7 +21,8 @@ DotsReporter.prototype.report = function(suiteSummary) {
   logger.info('Passed: ' + suiteSummary.passed);
   if (suiteSummary.failed > 0) {
     logger.error('FAILED: ' + suiteSummary.failed);
-    logger.error('To debug run \'elm-reactor -p 9908 \' and open ' + suiteSummary.testPageUrl + ' in a browser for more details.')
+    logger.error('To debug run \'elm-reactor -p 9908 \' and open ' + suiteSummary.testPageUrl
+      + ' in a browser for more details.');
   } else {
     logger.info('Done.');
   }

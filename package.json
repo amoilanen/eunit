@@ -1,6 +1,6 @@
 {
   "name": "eunit-runner",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Runner for eunit Elm unit tests",
   "main": "index.js",
   "directories": {

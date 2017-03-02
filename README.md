@@ -4,10 +4,28 @@ Minimalistic unit testing framework for Elm.
 
 ## Installation
 
-In the root directory of an Elm project:
+We need to install a PhantomJS-based test runner and the test package itself.
 
-* Run `elm-package install eunit` to install the `eunit` Elm package
-* Run `npm install -g eunit-runner` to install the command line test runner
+1. Test runner.
+
+Execute
+
+```
+npm install -g eunit-runner
+```
+
+to install the command line test runner globally
+
+2. Elm test package.
+
+In the root directory of an Elm project execute
+
+```
+elm-package install antivanov/eunit
+```
+
+to install the `eunit` Elm package
+
 
 ## Creating tests
 
@@ -85,3 +103,19 @@ You should get an output like the following one:
  FAILED: 2 
  To debug run 'elm-reactor -p 9908 ' and open http://localhost:9908/test/Main.elm in a browser for more details.
 ```
+
+#### Troubleshooting
+
+Sometimes Elm reactor would not be able to start due to some issues in `elm-make` https://github.com/elm-lang/elm-package/issues/254 "elm-make: Map.!: given key is not an element in the map"
+
+In case the following error is encountered
+
+```
+EUnit test runner 
+ Running test suite... 
+ 
+  ERROR: Could not run tests... More details below:
+elm-make: Map.!: given key is not an element in the map
+```
+
+remove the folder `elm-stuff` and try running the test cases again, now they should be executed successfully
