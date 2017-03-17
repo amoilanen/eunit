@@ -21,8 +21,8 @@ or test suites which group other test suites and simple tests together.
     Suite
       "mySuite"
       [
-        Test "test +" eql(2, 1 + 1)
-        , Test "test -" eql(2, 3 - 1)
+        Test "test +" eql 2 (1 + 1)
+        , Test "test -" eql 2 (3 - 1)
       ]
 
  It is expected that tests and suite are constructed using helper methods `describe` and `it` rather
@@ -33,8 +33,8 @@ or test suites which group other test suites and simple tests together.
     describe
       "mySuite"
       [
-        it "should add" eql(2, 1 + 1)
-        , it "should subtract" eql(2, 3 - 1)
+        it "should add" eql 2 (1 + 1)
+        , it "should subtract" eql 2 (3 - 1)
       ]
 -}
 type Test = Suite String (List Test) | Test String Expectation
@@ -43,11 +43,10 @@ type Test = Suite String (List Test) | Test String Expectation
 
  Simple test
 
-    it "should add" eql(2, 1 + 1)
+    it "should add" eql 2 (1 + 1)
 -}
 it: String -> Expectation -> Test
-it message expectation =
-  Test message expectation
+it = Test
 
 {-| Constructs a test suite consisting of other test suites or simple tests.
 
@@ -58,19 +57,18 @@ it message expectation =
        describe "+"
          [
            it "should be commutative"
-             eql(1 + 2, 2 + 1)
+             eql (1 + 2) (2 + 1)
            it "should have neutral element"
-             eql(0 + 2, 2)
+             eql (0 + 2) 2
          ]
       , describe "*"
          [
            it "should be commutative"
-             eql(3 * 2, 2 * 3)
+             eql (3 * 2) (2 * 3)
            it "should have neutral element"
-             eql(1 * 2, 2)
+             eql (1 * 2) 2
          ]
     ]
 -}
 describe: String -> List Test -> Test
-describe description suites =
-  Suite description suites
+describe = Suite

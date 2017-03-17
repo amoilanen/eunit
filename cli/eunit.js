@@ -80,9 +80,3 @@ if (initMode) {
   }
 }
 
-//TODO: Publish the Elm package
-//TODO: Publish eunit init eunit run the runner package to npmjs
-
-//TODO: Add details how to run eunit/generate unit tests to README
-//TODO: Add documentation to install dependency to eunit to elm-package.json (with elm-package)
-

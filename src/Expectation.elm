@@ -29,11 +29,11 @@ type alias Expectation = {
 
  Expecting that 3 == 3
 
-    eql(3, 3)
+    eql 3 3
 
  The following expectation can be constructed, but will fail verification
 
-    eql(2, 3)
+    eql 2 3
 -}
 eql: a -> a -> Expectation
 eql expected actual =
